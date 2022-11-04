@@ -1,0 +1,14 @@
+0 = uang keluar
+1 = Deposit Masuk
+2 = Lebih Bayar (Masuk)
+3 = Lebih Bayar (Keluar *alias membayar)
+
+kolom id_match dan kolom id_sj
+[
+     0 = id_match dan id_sj
+     1 = id f_spl_deposit dan dan id_sj
+     2 = id_match dan id_lb
+     3 = id_lb dan id_sj
+]
+--not valid--
+1 && flag_matching > 0 = Deposit Masuk hasil Sisa Matching
