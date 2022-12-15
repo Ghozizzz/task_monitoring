@@ -16,6 +16,19 @@ class Model_master extends CI_Model{
         return $this->db->query("Select * From users where id_roles=".$id);
     }
 
+/** client **/
+    function get_client($id = null){
+        $this->db->select('*');
+        $this->db->from('m_client');
+        if ($id != null) {
+            $this->db->where('id', $id);
+        }
+        $this->db->order_by('nama_client','asc');
+        $query = $this->db->get();
+        return $query;
+
+    }
+
 /** Numberings **/
     function list_numbering(){
         $data = $this->db->query("Select * From m_numberings");      

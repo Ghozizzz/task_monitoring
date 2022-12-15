@@ -51,7 +51,11 @@
           <div class="card-header">
             <h3 class="card-title">Task Detail List</h3>
             <div class="card-tools">
-              <button class="btn btn-sm btn-block btn-primary" id="tambah">Tambah</button>
+              <?php
+                if($header['status_header']==0){
+                  echo '<button class="btn btn-sm btn-block btn-primary" id="tambah">Tambah</button>';
+                }
+              ?>
             </div>
           </div>
           <!-- /.card-header -->
@@ -60,11 +64,11 @@
               <thead>
                 <tr>
                   <td width="2%">#</td>
-                  <td width="15%">Task Number</td>
+                  <td width="10%">Task Number</td>
                   <td width="10%">Tanggal</td>
                   <td width="10%">Nama PIC</td>
-                  <td width="30%">Notes</td>
-                  <td width="20%">Percentage</td>
+                  <td width="50%">Notes</td>
+                  <td width="5%">Percentage</td>
                   <td width="13%">Action</td>
                 </tr>
               </thead>
@@ -82,7 +86,7 @@
 </section>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="basic" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">&nbsp;</h4>
@@ -93,18 +97,18 @@
                     id="frmInv">
                     <input type="hidden" id="id" name="id">
                     <div class="row mb-1">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             Task Number
                         </div>
-                        <div class="col-md-7">
-                            <input type="text" id="task_number" name="task_number" class="form-control myline">
+                        <div class="col-md-8">
+                            <input type="text" id="task_number" name="task_number" class="form-control myline" value="Auto Generated" readonly>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-md-5">
-                            Tanggal
+                        <div class="col-md-4">
+                            Tanggal Selesai
                         </div>
-                        <div class="col-md-7">
+                        <div class="col-md-8">
                           <div class="input-group date" id="date_id" data-target-input="nearest">
                               <input type="text" name="tanggal" value="<?=date('Y-m-d');?>" class="form-control datetimepicker-input" id="tanggal_dt" data-target="#date_id" placeholder="Tanggal ..."/>
                               <div class="input-group-append" data-target="#date_id" data-toggle="datetimepicker">
@@ -114,28 +118,28 @@
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             PIC<font color="#f00">*</font>
                         </div>
-                        <div class="col-md-7">
+                        <div class="col-md-8">
                             <input type="text" id="pic_name" name="pic_name" class="form-control myline"
                               value="<?=$this->session->userdata('name');;?>" readonly="readonly">
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             Notes
                         </div>
-                        <div class="col-md-7">
-                          <textarea class="form-control" name="notes" id="notes"></textarea>
+                        <div class="col-md-8">
+                          <textarea rows="5" class="form-control" name="notes" id="notes"></textarea>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             Percentage<br>
                             <small><b>Range 0-100</b></small>
                         </div>
-                        <div class="col-md-7">
+                        <div class="col-md-8">
                             <input type="text" id="percentage" name="percentage" class="form-control myline" value="0">
                         </div>
                     </div>
@@ -196,7 +200,6 @@ $(document).ready(function() {
 $("#tambah").click(function(){
   dsState = "Input";
   $('#id').val('');
-  $('#task_number').val('');
   $('#tanggal_dt').val('');
   $('#notes').val('');
   $('#percentage').val('');

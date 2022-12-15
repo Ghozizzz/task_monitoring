@@ -122,6 +122,14 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              <?php if($this->session->userdata('id_roles') != 3){ ?>
+              <li class="nav-item">
+                <a href="<?=base_url();?>Task/home" class="nav-link <?=($m1 == 'Task' && $m2=='home')? 'active':'' ;?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Project Home</p>
+                </a>
+              </li>
+              <?php } ?>
               <li class="nav-item">
                 <a href="<?=base_url();?>Task/index" class="nav-link <?=($m1 == 'Task' && $m2=='index')? 'active':'' ;?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -145,6 +153,12 @@
                 <a href="<?=base_url();?>Admin/numbering" class="nav-link <?=($m2=='numbering')? 'active':'' ;?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Numbering</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?=base_url();?>Admin/client" class="nav-link <?=($m2=='client')? 'active':'' ;?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Client</p>
                 </a>
               </li>
               <li class="nav-item">

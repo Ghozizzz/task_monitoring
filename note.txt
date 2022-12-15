@@ -1,0 +1,6 @@
+Tambah task di project home (done)
+Tambah task detail di project home di masing2 level (done)
+Deskripsi limit di header title (done)
+Buat Accordion Detail terakhir juga (done
+Tombol edit jika tidak ada detail (done)
+History task detail masuk ke parent nya (level 1) (done)

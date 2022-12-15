@@ -15,6 +15,80 @@ class Admin extends CI_Controller
         $this->load->view('layout', $data);
     }
 
+/** client **/
+    public function client()
+    {
+        $data['content']= "master/client";
+        $data['data'] = $this->Model_master->get_client()->result();
+        $this->load->view('layout', $data);
+    }
+
+    function client_save(){
+        $user_id  = $this->session->userdata('user_id');
+        $tanggal  = date('Y-m-d H:i:s');
+        $this->db->trans_start();
+        $data = [
+                    'nama_client'=> $this->input->post('nama_client'),
+                    'alamat'=> $this->input->post('alamat'),
+                    'created_at'=> $tanggal,
+                    'created_by'=> $user_id,
+                ];
+       
+        $this->db->insert('m_client', $data); 
+        if($this->db->trans_complete()){
+            $this->session->set_flashdata('sukses', 'Data client berhasil disimpan');
+        }else{
+            $this->session->set_flashdata('gagal', 'Data client gagal disimpan');
+        }
+        redirect('Admin/client');       
+    }
+    
+    function client_delete(){
+        $id = $this->uri->segment(3);
+        $this->db->trans_start();
+        if(!empty($id)){
+            $this->db->where('id', $id);
+            $this->db->delete('m_client');            
+        }
+        if($this->db->trans_complete()){
+            $this->session->set_flashdata('sukses', 'Data client berhasil dihapus');
+        }else{
+            $this->session->set_flashdata('gagal', 'Data client gagal dihapus');
+        }
+        redirect('Admin/client');
+    }
+    
+    function client_edit(){
+        $id = $this->input->post('id');
+        $data = $this->Model_master->get_client($id)->row_array(); 
+
+        header('Content-Type: application/json');
+        echo json_encode($data);       
+    }
+    
+    function client_update(){
+        $user_id  = $this->session->userdata('user_id');
+        $tanggal  = date('Y-m-d H:i:s');
+        $this->db->trans_start();
+        
+        $data = [
+                'nama_client'=> $this->input->post('nama_client'),
+                'alamat' => $this->input->post('alamat'),
+                'modified_at'=> $tanggal,
+                'modified_by'=> $user_id
+            ];
+        
+        $this->db->where('id', $this->input->post('id'));
+        $this->db->update('m_client', $data);
+        
+        if($this->db->trans_complete()){
+            $this->session->set_flashdata('sukses', 'Data client berhasil disimpan');
+        }else{
+            $this->session->set_flashdata('gagal', 'Data client gagal disimpan');
+        }
+        redirect('Admin/client');
+    }
+
 /** Users **/
     public function users()
     {

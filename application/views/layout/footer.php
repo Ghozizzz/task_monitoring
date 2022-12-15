@@ -70,6 +70,10 @@ $(function () {
       format: 'YYYY-MM-DD',
   });
 
+  $('#dt_date_id').datetimepicker({
+      format: 'YYYY-MM-DD',
+  });
+
   $('#date_jt').datetimepicker({
       format: 'YYYY-MM-DD'
   });
