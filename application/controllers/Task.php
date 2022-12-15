@@ -63,7 +63,8 @@ class Task extends CI_Controller
             }
         }
 
-        $loop = $this->Model_task->task_full($s,$e,$status,$pic,$id_roles,$user_id,$task_id_in)->result();
+        $loop = $this->Model_task->task_full($s,$e,$status,$pic,$id_roles,$user_id,$task_id_in,$this->db->dbdriver)->result();
+
         foreach ($loop as $key => $v) {
             $detail = json_decode($v->list);
             $json = [];

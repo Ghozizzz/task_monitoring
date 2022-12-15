@@ -5,7 +5,7 @@ class Model_task extends CI_Model{
         return $this->db->query("select * from task where id = ".$id);
     }
 
-    function task_full($s,$e,$status,$pic,$id_roles,$user_id,$task_id){
+    function task_full($s,$e,$status,$pic,$id_roles,$user_id,$task_id,$db_driver){
         $where = '';
         if($id_roles==2){
             $where .= 'and t.pic_id ='.$user_id.' ';
@@ -18,20 +18,34 @@ class Model_task extends CI_Model{
             $where .= 'and t.pic_id = '.$pic.' ';
         }
 
-        return $this->db->query("Select t.*, COALESCE((select round(sum(percentage)/count(id),2) from task_detail where task_id = t.id and parent_id = 0),0) as percentage, 
-            CONCAT('[',
-                GROUP_CONCAT(JSON_OBJECT(
-                    'detail_id', td.id,
-                    'task_number', td.task_number,
-                    'notes_detail', td.notes,
-                    'persen_detail', td.percentage,
-                    'child', (select count(id) from task_detail where parent_id = td.id)
-                    )
-                ),']') as list
-            From task t
-            left join task_detail td on td.task_id = t.id and td.level = 1
-            where t.tanggal between '".$s."' and '".$e."' ".$where."
-            group by t.id");
+        if($db_driver=='postgre'){
+            return $this->db->query("Select t.*, COALESCE((select round(sum(percentage)/count(id),2) from task_detail where task_id = t.id and parent_id = 0),0) as percentage, json_agg(json_build_object(
+                        'detail_id', td.id,
+                        'task_number', td.task_number,
+                        'notes_detail', td.notes,
+                        'persen_detail', td.percentage,
+                        'child', (select count(id) from task_detail where parent_id = td.id)
+                        )) as list
+                From task t
+                left join task_detail td on td.task_id = t.id and td.level = 1
+                where t.tanggal between '".$s."' and '".$e."' ".$where."
+                group by t.id, td.id");
+        }else{
+            return $this->db->query("Select t.*, COALESCE((select round(sum(percentage)/count(id),2) from task_detail where task_id = t.id and parent_id = 0),0) as percentage, 
+                CONCAT('[',
+                    GROUP_CONCAT(JSON_OBJECT(
+                        'detail_id', td.id,
+                        'task_number', td.task_number,
+                        'notes_detail', td.notes,
+                        'persen_detail', td.percentage,
+                        'child', (select count(id) from task_detail where parent_id = td.id)
+                        )
+                    ),']') as list
+                From task t
+                left join task_detail td on td.task_id = t.id and td.level = 1
+                where t.tanggal between '".$s."' and '".$e."' ".$where."
+                group by t.id");
+        }
     }
 
     function get_task_persen($id){
@@ -69,11 +83,11 @@ class Model_task extends CI_Model{
     }
 
     function task_persen($id){
-        return $this->db->query("SELECT count(id) as jumlah, sum(percentage) as persen  FROM `task_detail` where task_id = ".$id." and level = 1");
+        return $this->db->query("SELECT count(id) as jumlah, sum(percentage) as persen  FROM task_detail where task_id = ".$id." and level = 1");
     }
 
     function parent_persen($id){
-        return $this->db->query("SELECT count(id) as jumlah, sum(percentage) as persen  FROM `task_detail` where parent_id = ".$id);
+        return $this->db->query("SELECT count(id) as jumlah, sum(percentage) as persen  FROM task_detail where parent_id = ".$id);
     }
 
     function cek_number($id,$level){
